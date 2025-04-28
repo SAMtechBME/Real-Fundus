@@ -1,6 +1,6 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append('/content/Real-Fundus')
 
 from config import Config 
 opt = Config('train.yml')
