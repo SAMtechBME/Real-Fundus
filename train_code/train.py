@@ -85,10 +85,10 @@ warmup = True
 if warmup:
     warmup_epochs = 5
     scheduler_cosine_G = optim.lr_scheduler.CosineAnnealingLR(optimizer_G, opt.OPTIM.NUM_EPOCHS-warmup_epochs, eta_min=1e-6)
-    scheduler_G = GradualWarmupScheduler(optimizer_G, multiplier=1, total_epoch=warmup_epochs, after_scheduler=scheduler_cosine_G)
+    scheduler_G = GradualWarmupScheduler(optimizer_G, multiplier=1.5, total_epoch=warmup_epochs, after_scheduler=scheduler_cosine_G)
     scheduler_G.step()
     scheduler_cosine_D = optim.lr_scheduler.CosineAnnealingLR(optimizer_D, opt.OPTIM.NUM_EPOCHS - warmup_epochs,eta_min=1e-6)
-    scheduler_D = GradualWarmupScheduler(optimizer_D, multiplier=1, total_epoch=warmup_epochs,after_scheduler=scheduler_cosine_D)
+    scheduler_D = GradualWarmupScheduler(optimizer_D, multiplier=1.5, total_epoch=warmup_epochs,after_scheduler=scheduler_cosine_D)
     scheduler_D.step()
 
 if len(device_ids)>1:
