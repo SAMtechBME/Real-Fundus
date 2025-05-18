@@ -13,10 +13,15 @@ OPTIM:
 
   
 
+#TRAINING:
+ # TRAIN_PS: 128
+  #TRAIN_DIR: './datasets/train_dataset/' # path to training data
+  #VAL_DIR: './datasets/train_dataset/'     # path to validation data
+  #SAVE_DIR: './checkpoints/'        # path to save models and images
+  #SAVE_IMAGES: False
 TRAINING:
-  TRAIN_PS: 128
-  TRAIN_DIR: './datasets/train_dataset/' # path to training data
-  VAL_DIR: './datasets/train_dataset/'     # path to validation data
-  SAVE_DIR: './checkpoints/'        # path to save models and images
+  TRAIN_DIR: '/content/Real-Fundus/datasets/train_dataset/'
+  VAL_DIR: '/content/Real-Fundus/datasets/val/'
+  SAVE_DIR: '/content/Real-Fundus/checkpoints/'
   SAVE_IMAGES: False
 
