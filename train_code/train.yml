@@ -21,7 +21,7 @@ OPTIM:
   #SAVE_IMAGES: False
 TRAINING:
   TRAIN_DIR: '/content/Real-Fundus/datasets/train_dataset/'
-  VAL_DIR: '/content/Real-Fundus/datasets/val/'
+  VAL_DIR: '/content/Real-Fundus/datasets/val_dataset/'
   SAVE_DIR: '/content/Real-Fundus/checkpoints/'
   SAVE_IMAGES: False
 
