@@ -20,6 +20,7 @@ OPTIM:
   #SAVE_DIR: './checkpoints/'        # path to save models and images
   #SAVE_IMAGES: False
 TRAINING:
+  TRAIN_PS: 128
   TRAIN_DIR: '/content/Real-Fundus/datasets/train_dataset/'
   VAL_DIR: '/content/Real-Fundus/datasets/val_dataset/'
   SAVE_DIR: '/content/Real-Fundus/checkpoints/'
