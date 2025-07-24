@@ -8,9 +8,9 @@ MODEL:
 
 # Optimization arguments.
 OPTIM:
-  BATCH_SIZE: 4
+  BATCH_SIZE: 2
   NUM_EPOCHS: 100
-
+#batch 4
   
 
 #TRAINING:
