@@ -105,10 +105,10 @@ losse = EdgeLoss().cuda()
 img_options_train = {'patch_size':opt.TRAINING.TRAIN_PS}
 train_dataset = get_training_data_RF(train_dir, img_options_train) 
 #train num workers 16
-train_loader = DataLoader(dataset=train_dataset, batch_size=opt.OPTIM.BATCH_SIZE, shuffle=True, num_workers=2, drop_last=False)
+train_loader = DataLoader(dataset=train_dataset, batch_size=opt.OPTIM.BATCH_SIZE, shuffle=True, num_workers=0, drop_last=False)
 val_dataset = get_validation_data_RF(val_dir)
 #val num workers 8
-val_loader = DataLoader(dataset=val_dataset, batch_size=16, shuffle=False, num_workers=2, drop_last=False)
+val_loader = DataLoader(dataset=val_dataset, batch_size=16, shuffle=False, num_workers=0, drop_last=False)
 
 logger.info('===> Start Epoch {} End Epoch {}'.format(start_epoch,opt.OPTIM.NUM_EPOCHS + 1))
 logger.info('===> Loading datasets')
