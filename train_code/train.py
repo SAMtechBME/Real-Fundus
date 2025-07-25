@@ -1,4 +1,4 @@
-import sys
+'''import sys
 import os
 sys.path.append('/content/Real-Fundus')
 
@@ -231,4 +231,103 @@ for epoch in range(start_epoch, opt.OPTIM.NUM_EPOCHS + 1):
                 'optimizer' : optimizer_G.state_dict()
                 }, os.path.join(model_dir,f"model_epoch_{epoch}.pth")) 
 
+'''
 
+from torch.cuda.amp import autocast, GradScaler
+scaler_G = GradScaler()
+scaler_D = GradScaler()
+
+...
+
+for epoch in range(start_epoch, opt.OPTIM.NUM_EPOCHS + 1):
+    epoch_start_time = time.time()
+    epoch_loss = 0
+    D_loss_sum_patch = 0
+    train_id = 1
+        
+    for i, data in enumerate(tqdm(train_loader), 0):
+
+        target = data[0].cuda()
+        input_ = data[1].cuda()
+
+        # Skip zero-size batches (often black patches)
+        if target.numel() == 0 or input_.numel() == 0:
+            continue
+
+        if epoch > 5:
+            target, input_ = mixup.aug(target, input_)
+
+        # Train Discriminator
+        with autocast():
+            restored = model_g(input_)
+            restored = torch.clamp(restored, 0, 1)
+            real_output = model_d(target)
+            fake_output = model_d(restored)
+
+            D_loss_real = lossm(real_output, real_labels_patch[:len(real_output)])
+            D_loss_fake = lossm(fake_output, fake_labels_patch[:len(fake_output)])
+            D_loss_patch = D_loss_real + D_loss_fake
+
+        optimizer_D.zero_grad()
+        scaler_D.scale(D_loss_patch).backward()
+        scaler_D.step(optimizer_D)
+        scaler_D.update()
+
+        D_loss_sum_patch += D_loss_patch.item()
+
+        # Train Generator
+        with autocast():
+            restored = model_g(input_)
+            restored = torch.clamp(restored, 0, 1)
+            fake_output = model_d(restored)
+
+            G_loss_patch = lossm(fake_output, real_labels_patch[:len(fake_output)])
+            loss1 = lossc(restored, target)
+            loss2 = lossp(restored, target)
+            loss3 = losse(restored, target)
+            loss = 1 * loss1 + 0.06 * loss2 + 0.05 * loss3 + 0.2 * G_loss_patch
+
+        optimizer_G.zero_grad()
+        scaler_G.scale(loss).backward()
+        scaler_G.step(optimizer_G)
+        scaler_G.update()
+
+        epoch_loss += loss.item()
+
+        #### Evaluation ####
+        if i % eval_now == 0 and i > 0:
+            model_g.eval()
+            with torch.no_grad():
+                psnr_val_rgb = []
+                for ii, data_val in enumerate(val_loader, 0):
+                    target = data_val[0].cuda()
+                    input_ = data_val[1].cuda()
+
+                    if target.numel() == 0 or input_.numel() == 0:
+                        continue
+
+                    with autocast():
+                        restored = model_g(input_)
+                        restored = torch.clamp(restored, 0, 1)
+                        psnr_val_rgb.append(utils.batch_PSNR(restored, target, 1.))
+
+            psnr_val_rgb = sum(psnr_val_rgb) / len(psnr_val_rgb)
+            if psnr_val_rgb > best_psnr:
+                best_psnr = psnr_val_rgb
+                best_epoch = epoch
+                best_iter = i
+                torch.save({'epoch': epoch,
+                            'state_dict': model_g.state_dict(),
+                            'optimizer': optimizer_G.state_dict()},
+                           os.path.join(model_dir, "model_best.pth"))
+
+            logger.info(f"[Ep {epoch} it {i} PSNR: {psnr_val_rgb:.4f}]")
+
+            model_g.train()
+            torch.cuda.empty_cache()  # 🔄 free memory
+
+    scheduler_D.step()
+    scheduler_G.step()
+    torch.cuda.empty_cache()  # 🔄 free memory
+
+    logger.info("Epoch {:d} completed. Loss: {:.6f}".format(epoch, epoch_loss))
