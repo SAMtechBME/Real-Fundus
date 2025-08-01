@@ -330,7 +330,7 @@ losse = EdgeLoss().cuda()
 
 ######### DataLoaders ###########
 img_options_train = {'patch_size': opt.TRAINING.TRAIN_PS}
-train_dataset = get_training_data_RF(train_dir, img_options_train, skip_black=True)  # 🟪 Skip black patches
+train_dataset = get_training_data_RF(train_dir, img_options_train) 
 train_loader = DataLoader(train_dataset, batch_size=opt.OPTIM.BATCH_SIZE, shuffle=True, num_workers=2, drop_last=False)
 
 val_dataset = get_validation_data_RF(val_dir)
