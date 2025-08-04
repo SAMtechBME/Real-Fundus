@@ -281,7 +281,10 @@ mode = opt.MODEL.MODE
 session = opt.MODEL.SESSION
 
 result_dir = os.path.join(opt.TRAINING.SAVE_DIR, mode, 'results', session)
-model_dir  = os.path.join(opt.TRAINING.SAVE_DIR, mode, 'models',  session)
+#model_dir  = os.path.join(opt.TRAINING.SAVE_DIR, mode, 'models',  session)
+model_dir = "/content/Real-Fundus/saved_models"
+os.makedirs(model_dir, exist_ok=True)
+
 
 utils.mkdir(result_dir)
 utils.mkdir(model_dir)
