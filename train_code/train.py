@@ -426,7 +426,7 @@ for epoch in range(start_epoch, opt.OPTIM.NUM_EPOCHS + 1):
                 'state_dict': model_g.state_dict(),
                 'optimizer': optimizer_G.state_dict()},
                 os.path.join(model_dir, f"model_epoch_{epoch}.pth"))'''
- '''   torch.save({
+    '''torch.save({
                 'epoch': epoch,
                 'state_dict': model_g.state_dict(),
                 'optimizer': optimizer_G.state_dict()},
