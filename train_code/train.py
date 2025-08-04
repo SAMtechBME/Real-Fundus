@@ -422,8 +422,13 @@ for epoch in range(start_epoch, opt.OPTIM.NUM_EPOCHS + 1):
 
     logger.info(f"Epoch {epoch} completed | Loss: {epoch_loss:.4f} | Best PSNR: {best_psnr:.4f}")
 
-    torch.save({'epoch': epoch,
+    '''torch.save({'epoch': epoch,
                 'state_dict': model_g.state_dict(),
                 'optimizer': optimizer_G.state_dict()},
-                os.path.join(model_dir, f"model_epoch_{epoch}.pth"))
+                os.path.join(model_dir, f"model_epoch_{epoch}.pth"))'''
+    torch.save({
+                'epoch': epoch,
+                'state_dict': model_g.state_dict(),
+                'optimizer': optimizer_G.state_dict()},
+               os.path.join(model_dir, "model_best.pth"))
 
